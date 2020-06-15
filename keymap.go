@@ -4,14 +4,16 @@ import "math"
 
 type KeyMap map[rune][2]float64
 
-func MakeKeyMap(rows ...string) KeyMap {
+func MakeKeyMap(rowsets ...[]string) KeyMap {
 	m := KeyMap{}
 
-	for y, row := range rows {
-		for x, r := range row {
-			m[r] = [2]float64{
-				float64(x),
-				float64(y),
+	for _, rowset := range rowsets {
+		for y, row := range rowset {
+			for x, r := range row {
+				m[r] = [2]float64{
+					float64(x),
+					float64(y),
+				}
 			}
 		}
 	}
@@ -19,8 +21,13 @@ func MakeKeyMap(rows ...string) KeyMap {
 	return m
 }
 
+const z rune = '\x00'
+
 var (
-	KeyMapQWERTY = MakeKeyMap("qwertyuiop", "asdfghjkl", "zxcvbnm")
+	KeyMapQWERTY = MakeKeyMap(
+		[]string{"qwertyuiop", "asdfghjkl", "zxcvbnm"},
+		[]string{"QWERTYUIOP", "ASDFGHJKL", "ZXCVBNM"},
+	)
 )
 
 func (k KeyMap) Dist(a, b rune) float64 {
