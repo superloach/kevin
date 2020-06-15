@@ -1,35 +1,38 @@
 package kevin
 
-import "sort"
+import (
+	"sort"
+)
 
 type sug struct {
-	word  string
-	score float64
+	w string
+	d float64
 }
 
 func Suggest(s string, n int, wl Wordlist, km KeyMap) []string {
+	return SuggestFn(s, n, wl, km, Distance)
+}
+
+func SuggestFn(s string, n int, wl Wordlist, km KeyMap, fn func(string, string, KeyMap) float64) []string {
 	sugs := make([]sug, 0)
 
-	for _, word := range wl {
-		if len(word) >= len(inp) {
-			sugs = append(sugs, sug{
-				word:  word,
-				score: Distance(inp, word, km),
-			})
-		}
+	for _, w := range wl {
+		sugs = append(sugs, sug{
+			w: w,
+			d: fn(s, w, km),
+		})
 	}
 
 	sort.Slice(sugs, func(i, j int) bool {
-		is, js := sugs[i].score, sugs[j].score
-		return is < js
+		return sugs[i].d < sugs[j].d
 	})
 
-	ssugs := make([]string, 0)
+	sws := make([]string, 0)
 	for i, s := range sugs {
 		if i >= n {
 			break
 		}
-		ssugs = append(ssugs, s.word)
+		sws = append(sws, s.w)
 	}
-	return ssugs
+	return sws
 }

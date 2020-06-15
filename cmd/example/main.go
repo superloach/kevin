@@ -16,7 +16,7 @@ func main() {
 		inp := input[:i+1]
 
 		fmt.Println(inp, kevin.Suggest(
-			inp, words, 3,
+			inp, 3, words,
 			kevin.KeyMapQWERTY,
 		))
 	}
