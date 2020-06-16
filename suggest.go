@@ -9,17 +9,13 @@ type sug struct {
 	d float64
 }
 
-func Suggest(s string, n int, wl Wordlist, km KeyMap) []string {
-	return SuggestFn(s, n, wl, km, Distance)
-}
-
-func SuggestFn(s string, n int, wl Wordlist, km KeyMap, fn func(string, string, KeyMap) float64) []string {
+func (l Layout) Suggest(s string, num int, words []string) []string {
 	sugs := make([]sug, 0)
 
-	for _, w := range wl {
+	for _, w := range words {
 		sugs = append(sugs, sug{
 			w: w,
-			d: fn(s, w, km),
+			d: l.Distance(s, w),
 		})
 	}
 
@@ -29,7 +25,7 @@ func SuggestFn(s string, n int, wl Wordlist, km KeyMap, fn func(string, string, 
 
 	sws := make([]string, 0)
 	for i, s := range sugs {
-		if i >= n {
+		if i >= num {
 			break
 		}
 		sws = append(sws, s.w)
