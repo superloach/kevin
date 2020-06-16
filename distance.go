@@ -28,7 +28,12 @@ func Distance(s1, s2 string, km KeyMap) float64 {
 				mat[y-1][x]+1,
 			)
 
-			tmp2 := mat[y-1][x-1] + km.Dist(rs1[y-1], rs2[x-1])*float64(sx-x)
+			tmp2 := mat[y-1][x-1] + km.Dist(
+				rs1[y-1],
+				rs2[x-1],
+			)*float64(sx-x) +
+				math.Abs(float64(sx-sy)/
+					float64(sx+sy))
 
 			mat[y][x] = math.Min(tmp1, tmp2)
 		}
