@@ -13,8 +13,9 @@ import (
 )
 
 var (
-	layout = flag.String("layout", "qwerty", "keyboard layout to use (supported: qwerty, dvorak, colemak)")
+	layout = flag.String("layout", "QWERTY", "keyboard layout to use (supported: QWERTY, Dvorak, Colemak)")
 	num    = flag.Int("num", 5, "number of suggestions to give")
+	biased = flag.Bool("biased", true, "whether to use SuggestBiased instead of Suggest")
 )
 
 var layouts = map[string]kevin.Layout{
@@ -29,6 +30,7 @@ func main() {
 	fmt.Println("downloading wordlist")
 	wordlist := wordlist30k()
 
+	*layout = strings.ToLower(*layout)
 	fmt.Printf("using layout %s\n", *layout)
 	l := layouts[*layout]
 
@@ -37,8 +39,13 @@ func main() {
 	words := flag.Args()
 	fmt.Printf("words: %s\n", words)
 
+	suggest := l.Suggest
+	if *biased {
+		suggest = l.SuggestBiased
+	}
+
 	for _, word := range words {
-		fmt.Println(word, l.Suggest(word, *num, wordlist))
+		fmt.Println(word, suggest(word, *num, wordlist))
 	}
 }
 

@@ -1,7 +1,10 @@
 package kevin
 
+// A Layout describes the physical position of keys (runes) on a keyboard.
 type Layout map[rune][2]float64
 
+// MakeLayout allows the creation of a Layout from slices of strings.
+// (see definitions of QWERTY, Dvorak, and Colemak for an example)
 func MakeLayout(skip rune, rowsets ...[]string) Layout {
 	l := Layout{}
 
@@ -23,6 +26,7 @@ func MakeLayout(skip rune, rowsets ...[]string) Layout {
 	return l
 }
 
+// Simple Layout definitions for standard keyboard layouts.
 var (
 	QWERTY = MakeLayout('…',
 		[]string{"qwertyuiop", "asdfghjkl…", "zxcvbnm………"},
